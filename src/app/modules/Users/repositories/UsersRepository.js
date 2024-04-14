@@ -8,7 +8,6 @@ class UsersRepository {
 
   async findById(id) {
     const userById = await Users.findOne({ where: { id } });
-    console.log('crepe');
     return userById;
   }
 
