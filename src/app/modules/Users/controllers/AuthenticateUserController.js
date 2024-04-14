@@ -19,4 +19,4 @@ class AuthenticateUserController {
   }
 }
 
-module.exports = new AuthenticateUserController();
+module.exports = AuthenticateUserController;

@@ -1,9 +1,14 @@
 const Users = require('../entities/Users');
 
 class UsersRepository {
+  async findAll() {
+    const users = await Users.findAll();
+    return users;
+  }
+
   async findById(id) {
     const userById = await Users.findOne({ where: { id } });
-
+    console.log('crepe');
     return userById;
   }
 
@@ -11,6 +16,19 @@ class UsersRepository {
     const userByEmail = await Users.findOne({ where: { email } });
 
     return userByEmail;
+  }
+
+  async createAdmin({
+    name, email, password,
+  }) {
+    const user = await Users.create({
+      name,
+      email,
+      password,
+      isAdmin: true,
+    });
+
+    return user;
   }
 
   async create({
@@ -42,6 +60,28 @@ class UsersRepository {
     }
 
     return user;
+  }
+
+  async updateAdmin(id, {
+    name, password, email,
+  }) {
+    const user = await Users.findOne({ where: { id } });
+
+    if (user) {
+      await user.update({
+        name,
+        password,
+        email,
+      });
+    }
+
+    return user;
+  }
+
+  async delete(id) {
+    const user = await Users.findOne({ where: { id } });
+
+    await user.destroy();
   }
 }
 

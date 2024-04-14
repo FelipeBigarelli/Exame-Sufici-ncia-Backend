@@ -3,6 +3,8 @@ const AuthenticateUserController = require('../controllers/AuthenticateUserContr
 
 const sessionRouter = Router();
 
-sessionRouter.post('/auth', AuthenticateUserController.authenticate);
+const authenticateUserController = new AuthenticateUserController();
+
+sessionRouter.post('/auth', authenticateUserController.authenticate);
 
 module.exports = sessionRouter;
