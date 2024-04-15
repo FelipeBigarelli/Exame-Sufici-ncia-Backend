@@ -64,7 +64,7 @@ class PizzaAdsRepository {
         ],
       },
     });
-    // console.log(filteredPizzas);
+
     return filteredPizzas;
   }
 }
