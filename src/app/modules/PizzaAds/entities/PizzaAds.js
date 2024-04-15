@@ -32,8 +32,7 @@ const PizzaAds = db.define('pizza_ads', {
   },
 
   image: {
-    type: DataTypes.BLOB('long'),
-    defaultValue: null,
+    type: DataTypes.BLOB,
   },
 
   price: {

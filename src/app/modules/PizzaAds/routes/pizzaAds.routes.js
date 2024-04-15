@@ -20,4 +20,6 @@ pizzaAdsRouter.post(
   pizzaAdsController.updateImage,
 );
 
+pizzaAdsRouter.get('/ads/filter', pizzaAdsController.filterPizzas);
+
 module.exports = pizzaAdsRouter;

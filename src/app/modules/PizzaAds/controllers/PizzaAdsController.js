@@ -22,19 +22,46 @@ class PizzaAdsController {
   }
 
   async updateImage(request, response) {
-    const { id: ad_id } = request.params;
-    const { id: user_id } = request.user;
-    const { image } = request.file;
+    try {
+      const { id } = request.params;
+      const { id: user_id } = request.user;
+      const image = request.file;
 
-    const checkUser = await PizzaAdsRepository.findById(ad_id);
+      // console.log(image, 'IMAGE CONTROLLER');
 
-    if (checkUser.userId !== user_id) {
-      response.status(401).json({ error: 'Ad is not related to this user' });
+      const checkUserIsAdOwner = await PizzaAdsRepository.findById(id);
+
+      if (!checkUserIsAdOwner) {
+        return response.status(400).json({ error: 'Ad not found' });
+      }
+
+      if (checkUserIsAdOwner.userId.toString() !== user_id) {
+        return response.status(401).json({ error: 'Ad is not related to this user' });
+      }
+
+      const ad = await PizzaAdsRepository.uploadImage({
+        id,
+        image: image.filename,
+      });
+
+      // console.log(ad);
+      return response.json(ad);
+    } catch (error) {
+      return response.status(400).json({ error: error.message });
+    }
+  }
+
+  async filterPizzas(request, response) {
+    const { ingredients, maxPrice } = request.body;
+
+    if (!ingredients || !maxPrice) {
+      return response.status(400).json({ error: 'Fields cannot be empty' });
     }
 
-    const ad = await PizzaAdsRepository.uploadImage(ad_id, image);
+    const filteredPizzas = await PizzaAdsRepository
+      .findFilteredPizzasByIngredients(ingredients, maxPrice);
 
-    return response.json(ad);
+    return response.json(filteredPizzas);
   }
 }
 

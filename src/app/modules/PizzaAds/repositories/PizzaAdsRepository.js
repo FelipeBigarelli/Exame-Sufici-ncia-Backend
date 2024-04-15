@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs');
+const { Sequelize } = require('sequelize');
 
 const PizzaAds = require('../entities/PizzaAds');
 
@@ -14,10 +15,12 @@ class PizzaAdsRepository {
     image,
     userId,
   }) {
+    const lowercaseIngredients = ingredients.map((ingredient) => ingredient.toLowerCase());
+
     const ad = await PizzaAds.create({
       name,
       description,
-      ingredients,
+      ingredients: lowercaseIngredients,
       price,
       image,
       userId,
@@ -32,11 +35,11 @@ class PizzaAdsRepository {
     return ad;
   }
 
-  async uploadImage({ ad_id, image }) {
-    const ad = await PizzaAds.findOne({ where: { ad_id } });
+  async uploadImage({ id, image }) {
+    const ad = await PizzaAds.findOne({ where: { id } });
 
     if (ad.image) {
-      const imageFilePath = path.join(uploadConfig.directory, ad.image);
+      const imageFilePath = path.join(uploadConfig.directory, String(ad.image));
       const imageFileExists = await fs.promises.stat(imageFilePath);
 
       if (imageFileExists) {
@@ -46,9 +49,23 @@ class PizzaAdsRepository {
 
     ad.image = image;
 
-    await PizzaAds.save(ad);
+    await ad.save();
 
     return ad;
+  }
+
+  async findFilteredPizzasByIngredients(ingredients, maxPrice) {
+    const filteredPizzas = await PizzaAds.findAll({
+      attributes: ['name', 'price'],
+      where: {
+        [Sequelize.Op.and]: [
+          Sequelize.fn('JSON_CONTAINS', Sequelize.col('ingredients'), JSON.stringify(ingredients)),
+          { price: { [Sequelize.Op.lte]: maxPrice } },
+        ],
+      },
+    });
+    // console.log(filteredPizzas);
+    return filteredPizzas;
   }
 }
 
