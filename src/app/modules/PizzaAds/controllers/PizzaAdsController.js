@@ -27,8 +27,6 @@ class PizzaAdsController {
       const { id: user_id } = request.user;
       const image = request.file;
 
-      // console.log(image, 'IMAGE CONTROLLER');
-
       const checkUserIsAdOwner = await PizzaAdsRepository.findById(id);
 
       if (!checkUserIsAdOwner) {
@@ -44,7 +42,6 @@ class PizzaAdsController {
         image: image.filename,
       });
 
-      // console.log(ad);
       return response.json(ad);
     } catch (error) {
       return response.status(400).json({ error: error.message });
