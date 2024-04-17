@@ -2,6 +2,8 @@ const path = require('path');
 const fs = require('fs');
 const { Sequelize } = require('sequelize');
 
+const AppError = require('../../../../shared/errors/AppError');
+
 const PizzaAds = require('../entities/PizzaAds');
 
 const uploadConfig = require('../../../config/upload');
@@ -58,7 +60,7 @@ class PizzaAdsRepository {
 
   async findFilteredPizzasByIngredients(ingredients, maxPrice) {
     const filteredPizzas = await PizzaAds.findAll({
-      attributes: ['name', 'price'],
+      attributes: ['name', 'price', [Sequelize.literal('CONVERT(image USING utf8)'), 'image']],
       where: {
         [Sequelize.Op.and]: [
           Sequelize.fn('JSON_CONTAINS', Sequelize.col('ingredients'), JSON.stringify(ingredients)),
@@ -68,6 +70,38 @@ class PizzaAdsRepository {
     });
 
     return filteredPizzas;
+  }
+
+  async likeAd(id) {
+    const ad = await PizzaAds.findOne({ where: { id } });
+
+    if (!ad) {
+      throw new AppError('Ad not found', 404);
+    }
+
+    ad.likes += 1;
+
+    await ad.save();
+
+    return ad;
+  }
+
+  async removeLikeAd(id) {
+    const ad = await PizzaAds.findOne({ where: { id } });
+
+    if (!ad) {
+      throw new AppError('Ad not found', 404);
+    }
+
+    if (ad.likes === 0) {
+      throw new AppError('Ad does not have any like', 400);
+    }
+
+    ad.likes -= 1;
+
+    await ad.save();
+
+    return ad;
   }
 }
 

@@ -60,6 +60,39 @@ class PizzaAdsController {
 
     return response.json(filteredPizzas);
   }
+
+  async likeAd(request, response) {
+    // try {
+    const { id } = request.params;
+
+    const ad = await PizzaAdsRepository.findById(id);
+
+    if (!ad) {
+      return response.status(404).json({ error: 'Ad not found' });
+    }
+
+    await PizzaAdsRepository.likeAd(ad.id);
+
+    return response.sendStatus(200);
+  }
+
+  async removeLikeAd(request, response) {
+    try {
+      const { id } = request.params;
+
+      const ad = await PizzaAdsRepository.findById(id);
+
+      if (!ad) {
+        return response.status(404).json({ error: 'Ad not found' });
+      }
+
+      await PizzaAdsRepository.removeLikeAd(ad.id);
+
+      return response.sendStatus(200);
+    } catch (error) {
+      return response.status(400).json({ error: error.message });
+    }
+  }
 }
 
 module.exports = PizzaAdsController;
