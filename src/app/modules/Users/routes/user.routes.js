@@ -10,15 +10,16 @@ const userRouter = Router();
 const userController = new UsersController();
 
 // Admin routes
-userRouter.post('/admin/create', userController.storeAdmin);
 userRouter.get('/users', ensureAuthenticated, ensureAdmin, userController.index);
-userRouter.delete('/users/:id', ensureAuthenticated, ensureAdmin, userController.delete);
+userRouter.post('/admin/create', userController.storeAdmin);
+userRouter.post('/admin/users/create', userController.store);
 userRouter.put('/admin/user/:id', ensureAuthenticated, ensureAdmin, userController.updateAdmin);
+userRouter.delete('/users/:id', ensureAuthenticated, ensureAdmin, userController.delete);
 
 // User routes
+userRouter.get('/users/:id', ensureAuthenticated, userController.show);
 userRouter.post('/users/create', userController.store);
 userRouter.put('/user', ensureAuthenticated, userController.update);
-userRouter.get('/users/:id', ensureAuthenticated, userController.show);
 userRouter.put('/users/:id', ensureAuthenticated, userController.update);
 
 module.exports = userRouter;
