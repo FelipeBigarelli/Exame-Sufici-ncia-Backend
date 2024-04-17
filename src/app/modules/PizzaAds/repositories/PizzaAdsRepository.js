@@ -9,6 +9,12 @@ const PizzaAds = require('../entities/PizzaAds');
 const uploadConfig = require('../../../config/upload');
 
 class PizzaAdsRepository {
+  async show() {
+    const ads = await PizzaAds.findAll();
+
+    return ads;
+  }
+
   async create({
     name,
     description,

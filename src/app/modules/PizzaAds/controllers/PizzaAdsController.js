@@ -1,6 +1,20 @@
 const PizzaAdsRepository = require('../repositories/PizzaAdsRepository');
 
 class PizzaAdsController {
+  async show(request, response) {
+    try {
+      const ads = await PizzaAdsRepository.show();
+
+      if (!ads) {
+        return response.status(404).json({ error: 'Does not have any ads at the moment' });
+      }
+
+      return response.status(200).json(ads);
+    } catch (error) {
+      return response.status(400).json({ error: error.message });
+    }
+  }
+
   async store(request, response) {
     const { id } = request.user;
     const {
@@ -62,18 +76,21 @@ class PizzaAdsController {
   }
 
   async likeAd(request, response) {
-    // try {
-    const { id } = request.params;
+    try {
+      const { id } = request.params;
 
-    const ad = await PizzaAdsRepository.findById(id);
+      const ad = await PizzaAdsRepository.findById(id);
 
-    if (!ad) {
-      return response.status(404).json({ error: 'Ad not found' });
+      if (!ad) {
+        return response.status(400).json({ error: 'Ad not found' });
+      }
+
+      await PizzaAdsRepository.likeAd(ad.id);
+
+      return response.sendStatus(200);
+    } catch (error) {
+      return response.status(400).json({ error: error.message });
     }
-
-    await PizzaAdsRepository.likeAd(ad.id);
-
-    return response.sendStatus(200);
   }
 
   async removeLikeAd(request, response) {
@@ -83,7 +100,7 @@ class PizzaAdsController {
       const ad = await PizzaAdsRepository.findById(id);
 
       if (!ad) {
-        return response.status(404).json({ error: 'Ad not found' });
+        return response.status(400).json({ error: 'Ad not found' });
       }
 
       await PizzaAdsRepository.removeLikeAd(ad.id);

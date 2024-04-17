@@ -23,6 +23,7 @@ pizzaAdsRouter.post(
 );
 
 pizzaAdsRouter.get('/ads/filter', pizzaAdsController.filterPizzas);
+pizzaAdsRouter.get('/ads/show', pizzaAdsController.show);
 
 pizzaAdsRouter.post('/ads/:id/comments', commentsController.store);
 
