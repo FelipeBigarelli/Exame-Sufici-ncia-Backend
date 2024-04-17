@@ -13,6 +13,7 @@ class PizzaAdsRepository {
     ingredients,
     price,
     image,
+    likes,
     userId,
   }) {
     const lowercaseIngredients = ingredients.map((ingredient) => ingredient.toLowerCase());
@@ -23,6 +24,7 @@ class PizzaAdsRepository {
       ingredients: lowercaseIngredients,
       price,
       image,
+      likes,
       userId,
     });
 

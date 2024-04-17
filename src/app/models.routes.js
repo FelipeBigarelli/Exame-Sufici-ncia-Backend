@@ -7,7 +7,6 @@ const AppError = require('../shared/errors/AppError');
 const Users = require('./modules/Users/entities/Users');
 const PizzaAds = require('./modules/PizzaAds/entities/PizzaAds');
 const Comments = require('./modules/PizzaAds/entities/Comments');
-const Likes = require('./modules/PizzaAds/entities/Likes');
 
 const modelsRouter = Router();
 
@@ -16,7 +15,6 @@ modelsRouter.post('/models', async (request, response) => {
     Users.hasMany(PizzaAds, { foreignKey: 'userId' });
     PizzaAds.belongsTo(Users, { foreignKey: 'userId' });
     Comments.belongsTo(PizzaAds, { foreignKey: 'adId' });
-    Likes.belongsTo(PizzaAds, { foreignKey: 'adId' });
 
     await db.sync();
 

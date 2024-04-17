@@ -40,6 +40,12 @@ const PizzaAds = db.define('pizza_ads', {
     allowNull: false,
   },
 
+  likes: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    defaultValue: 0,
+  },
+
   userId: {
     type: DataTypes.INTEGER,
     allowNull: false,

@@ -5,7 +5,7 @@ const db = require('../../../../shared/database/index');
 const Comments = db.define('comments', {
   id: {
     type: DataTypes.INTEGER,
-    autoIncremet: true,
+    autoIncrement: true,
     primaryKey: true,
   },
 

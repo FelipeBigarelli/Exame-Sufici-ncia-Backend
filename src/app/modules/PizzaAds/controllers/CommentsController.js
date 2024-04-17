@@ -1,17 +1,23 @@
 const CommentsRepository = require('../repositories/CommentsRepository');
+const PizzaAdsRepository = require('../repositories/PizzaAdsRepository');
 
 class CommentsController {
-  async createComment(request, response) {
-    const { adId } = request.params;
+  async store(request, response) {
+    const { id } = request.params;
     const { content } = request.body;
 
-    try {
-      const comment = await CommentsRepository.addComment(adId, content);
+    const ad = await PizzaAdsRepository.findById(id);
 
-      return response.status(201).json(comment);
-    } catch (error) {
-      response.status(400).json({ error: error.message });
+    if (!ad) {
+      response.status(404).json({ error: 'Ad not found' });
     }
+
+    const comment = await CommentsRepository.create({
+      content,
+      adId: ad.id,
+    });
+
+    return response.status(201).json(comment);
   }
 }
 
