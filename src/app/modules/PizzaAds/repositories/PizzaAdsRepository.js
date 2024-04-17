@@ -15,6 +15,12 @@ class PizzaAdsRepository {
     return ads;
   }
 
+  async findById(id) {
+    const ad = await PizzaAds.findOne({ where: { id } });
+
+    return ad;
+  }
+
   async create({
     name,
     description,
@@ -39,8 +45,30 @@ class PizzaAdsRepository {
     return ad;
   }
 
-  async findById(id) {
+  async updateAd(id, {
+    name,
+    description,
+    ingredients,
+    price,
+    image,
+    likes,
+  }) {
     const ad = await PizzaAds.findOne({ where: { id } });
+
+    if (!ad) {
+      throw new AppError('Ad not found', 404);
+    }
+
+    const lowercaseIngredients = ingredients.map((ingredient) => ingredient.toLowerCase());
+
+    await ad.update({
+      name,
+      description,
+      ingredients: lowercaseIngredients,
+      price,
+      image,
+      likes,
+    });
 
     return ad;
   }

@@ -35,6 +35,40 @@ class PizzaAdsController {
     response.json(ad);
   }
 
+  async updateAd(request, response) {
+    try {
+      const { id: user_id } = request.user;
+      const { id } = request.params;
+      const {
+        name,
+        description,
+        ingredients,
+        price,
+      } = request.body;
+
+      const adExists = await PizzaAdsRepository.findById(id);
+
+      if (!adExists) {
+        return response.status(404).json('Ad not found');
+      }
+
+      if (String(adExists.userId) !== user_id) {
+        return response.status(400).json('Ad is not associated with this user');
+      }
+
+      const updatedAd = await PizzaAdsRepository.updateAd(id, {
+        name,
+        description,
+        ingredients,
+        price,
+      });
+
+      return response.json(updatedAd);
+    } catch (error) {
+      return response.status(400).json({ error: error.message });
+    }
+  }
+
   async updateImage(request, response) {
     try {
       const { id } = request.params;

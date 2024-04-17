@@ -105,7 +105,7 @@ class UsersController {
       password: passwordHash,
     });
 
-    response.json(user);
+    return response.json(user);
   }
 
   async updateAdmin(request, response) {
@@ -119,9 +119,6 @@ class UsersController {
 
     const emailAlreadyExists = await UsersRepository.findByEmail(email);
     console.log(emailAlreadyExists, 'emailAlreadyExists');
-    // if (emailAlreadyExists && ) {
-    //   return response.status(400).json({ error: 'Email already exists ' });
-    // }
 
     const validatePassword = isPasswordValid(password);
 
@@ -141,7 +138,7 @@ class UsersController {
     //   password: passwordHash,
     // });
 
-    response.send();
+    return response.send();
   }
 
   async delete(request, response) {
@@ -155,7 +152,7 @@ class UsersController {
 
     await UsersRepository.delete(id);
 
-    response.sendStatus(204);
+    return response.sendStatus(204);
   }
 }
 
