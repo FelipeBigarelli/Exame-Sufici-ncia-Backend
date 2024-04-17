@@ -7,7 +7,7 @@ class UsersController {
   async index(request, response) {
     const users = await UsersRepository.findAll();
 
-    response.json(users);
+    return response.json(users);
   }
 
   async store(request, response) {
@@ -36,7 +36,7 @@ class UsersController {
       password: passwordHash,
     });
 
-    response.json(user);
+    return response.json(user);
   }
 
   async storeAdmin(request, response) {
@@ -65,7 +65,7 @@ class UsersController {
       password: passwordHash,
     });
 
-    response.json(user);
+    return response.json(user);
   }
 
   async show(request, response) {
@@ -76,7 +76,7 @@ class UsersController {
       return response.status(404).json({ error: 'User not found' });
     }
 
-    response.json(user);
+    return response.json(user);
   }
 
   async update(request, response) {
@@ -114,11 +114,14 @@ class UsersController {
 
     const userExists = await UsersRepository.findById(id);
     if (!userExists) {
-      response.status(404).json({ error: 'User not found' });
+      return response.status(404).json({ error: 'User not found' });
     }
 
     const emailAlreadyExists = await UsersRepository.findByEmail(email);
-    console.log(emailAlreadyExists, 'emailAlreadyExists');
+
+    if (emailAlreadyExists && emailAlreadyExists.email !== id) {
+      return response.status(400).json({ error: 'E-mail already in use' });
+    }
 
     const validatePassword = isPasswordValid(password);
 
@@ -130,15 +133,15 @@ class UsersController {
       return response.status(400).json({ error: 'Name is required' });
     }
 
-    // const passwordHash = await hash(password, 8);
+    const passwordHash = await hash(password, 8);
 
-    // const user = await UsersRepository.update(id, {
-    //   name,
-    //   email,
-    //   password: passwordHash,
-    // });
+    const user = await UsersRepository.update(id, {
+      name,
+      email,
+      password: passwordHash,
+    });
 
-    return response.send();
+    return response.send(user);
   }
 
   async delete(request, response) {

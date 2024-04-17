@@ -9,7 +9,7 @@ class CommentsController {
     const ad = await PizzaAdsRepository.findById(id);
 
     if (!ad) {
-      response.status(404).json({ error: 'Ad not found' });
+      return response.status(404).json({ error: 'Ad not found' });
     }
 
     const comment = await CommentsRepository.create({

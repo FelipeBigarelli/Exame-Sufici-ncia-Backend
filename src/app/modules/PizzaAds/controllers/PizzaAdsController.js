@@ -32,7 +32,7 @@ class PizzaAdsController {
       userId: id,
     });
 
-    response.json(ad);
+    return response.status(201).json(ad);
   }
 
   async updateAd(request, response) {
