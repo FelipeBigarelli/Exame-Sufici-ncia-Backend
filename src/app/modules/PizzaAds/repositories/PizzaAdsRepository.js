@@ -111,7 +111,6 @@ class PizzaAdsRepository {
         price: { [Sequelize.Op.lte]: maxPrice },
       };
     } else {
-      // Se nenhum dos parâmetros estiver presente, retornar uma array vazia
       return [];
     }
 
