@@ -9,6 +9,15 @@ class CommentsRepository {
 
     return comment;
   }
+
+  async findAll(adId) {
+    const comments = await Comments.findAll({
+      attributes: ['content', 'adId'],
+      where: { adId },
+    });
+
+    return comments;
+  }
 }
 
 module.exports = new CommentsRepository();

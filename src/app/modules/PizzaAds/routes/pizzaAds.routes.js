@@ -25,6 +25,7 @@ pizzaAdsRouter.post(
 pizzaAdsRouter.get('/ads/filter', pizzaAdsController.filterPizzas);
 pizzaAdsRouter.get('/ads/show', pizzaAdsController.show);
 
+pizzaAdsRouter.get('/ads/:id/comments', commentsController.show);
 pizzaAdsRouter.post('/ads/:id/comments', commentsController.store);
 
 pizzaAdsRouter.post('/ads/:id/like', pizzaAdsController.likeAd);
