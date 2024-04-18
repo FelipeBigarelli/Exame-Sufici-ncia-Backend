@@ -5,7 +5,7 @@
   - yarn install
   - npm install
 
-**3:** Configure o docker do banco de dados
+**3:** Configure o container do docker do banco de dados
   - docker run --name backend -p 3306:3306 -e MYSQL_ROOT_PASSWORD=1234 -d mysql
 
 **4:** Verifique se a instância 'backend' foi criada
