@@ -15,3 +15,8 @@
 
 **5:** Execute a aplicação
   - yarn dev
+
+**6:** No Postman ou Dbeaver, conecte ao database da aplicação com as configurações contidas no arquivo src/shared/database/index.js
+
+**7:** Crie e execute a rota de criação de tabelas do banco de dados
+  - POST: baseURL/models
