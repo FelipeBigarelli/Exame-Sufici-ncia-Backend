@@ -19,13 +19,13 @@ class UsersController {
 
     const validatePassword = isPasswordValid(password);
     if (!validatePassword) {
-      return response.status(400).json({ error: 'Password is not valid' });
+      return response.status(400).json({ error: 'Password must be numbers/strings' });
     }
 
     const userExists = await UsersRepository.findByEmail(email);
 
     if (userExists) {
-      return response.status(400).json({ error: 'Email already exists ' });
+      return response.status(400).json({ error: 'Email already exists' });
     }
 
     const passwordHash = await hash(password, 8);
@@ -70,10 +70,15 @@ class UsersController {
 
   async show(request, response) {
     const { id } = request.params;
+    const { id: reqUserId } = request.user;
     const user = await UsersRepository.findById(id);
 
     if (!user) {
       return response.status(404).json({ error: 'User not found' });
+    }
+
+    if (id !== reqUserId) {
+      return response.status(400).json({ error: 'User does not have permissions' });
     }
 
     return response.json(user);

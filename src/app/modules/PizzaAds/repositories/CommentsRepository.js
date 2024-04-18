@@ -12,7 +12,7 @@ class CommentsRepository {
 
   async findAll(adId) {
     const comments = await Comments.findAll({
-      attributes: ['content', 'adId'],
+      attributes: ['content'],
       where: { adId },
     });
 
