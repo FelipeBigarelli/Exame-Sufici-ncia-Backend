@@ -20,7 +20,7 @@ const PizzaAds = db.define('pizza_ads', {
   },
 
   ingredients: {
-    type: DataTypes.TEXT, // Usando TEXT para armazenar dados serializados
+    type: DataTypes.TEXT,
     allowNull: false,
     get() {
       const ingredientsString = this.getDataValue('ingredients');

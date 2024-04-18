@@ -3,11 +3,14 @@ const express = require('express');
 const routes = require('./shared/routes/routes');
 const AppError = require('./shared/errors/AppError');
 
+const uploadConfig = require('./app/config/upload');
+
 require('./shared/database/index');
 
 const app = express();
 
 app.use(express.json());
+app.use('/files', express.static(uploadConfig.directory));
 app.use(routes);
 
 // eslint-disable-next-line no-unused-vars

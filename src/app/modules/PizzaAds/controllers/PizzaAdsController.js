@@ -97,14 +97,30 @@ class PizzaAdsController {
   }
 
   async filterPizzas(request, response) {
-    const { ingredients, maxPrice } = request.body;
+    const { ingredients, maxPrice } = request.query;
 
-    if (!ingredients || !maxPrice) {
-      return response.status(400).json({ error: 'Fields cannot be empty' });
+    if (!ingredients && !maxPrice) {
+      return response.status(400).json({ error: 'Both fields cannot be empty' });
     }
 
-    const filteredPizzas = await PizzaAdsRepository
-      .findFilteredPizzasByIngredients(ingredients, maxPrice);
+    let filteredPizzas;
+
+    if (ingredients && maxPrice) {
+      filteredPizzas = await PizzaAdsRepository.findFilteredPizzasByIngredients(
+        ingredients,
+        maxPrice,
+      );
+    } else if (ingredients) {
+      filteredPizzas = await PizzaAdsRepository.findFilteredPizzasByIngredients(
+        ingredients,
+        null,
+      );
+    } else if (maxPrice) {
+      filteredPizzas = await PizzaAdsRepository.findFilteredPizzasByIngredients(
+        null,
+        maxPrice,
+      );
+    }
 
     return response.json(filteredPizzas);
   }

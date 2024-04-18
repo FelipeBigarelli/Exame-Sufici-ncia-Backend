@@ -10,7 +10,9 @@ const uploadConfig = require('../../../config/upload');
 
 class PizzaAdsRepository {
   async show() {
-    const ads = await PizzaAds.findAll();
+    const ads = await PizzaAds.findAll({
+      attributes: ['name', 'price', 'description', [Sequelize.literal('CONVERT(image USING utf8)'), 'image']],
+    });
 
     return ads;
   }
@@ -93,14 +95,29 @@ class PizzaAdsRepository {
   }
 
   async findFilteredPizzasByIngredients(ingredients, maxPrice) {
-    const filteredPizzas = await PizzaAds.findAll({
-      attributes: ['name', 'price', [Sequelize.literal('CONVERT(image USING utf8)'), 'image']],
-      where: {
+    let whereFilter = {};
+
+    if (ingredients && maxPrice) {
+      whereFilter = {
         [Sequelize.Op.and]: [
           Sequelize.fn('JSON_CONTAINS', Sequelize.col('ingredients'), JSON.stringify(ingredients)),
           { price: { [Sequelize.Op.lte]: maxPrice } },
         ],
-      },
+      };
+    } else if (ingredients) {
+      whereFilter = Sequelize.literal(`JSON_CONTAINS(ingredients, '${JSON.stringify(ingredients)}')`);
+    } else if (maxPrice) {
+      whereFilter = {
+        price: { [Sequelize.Op.lte]: maxPrice },
+      };
+    } else {
+      // Se nenhum dos parâmetros estiver presente, retornar uma array vazia
+      return [];
+    }
+
+    const filteredPizzas = await PizzaAds.findAll({
+      attributes: ['name', 'price', 'description', [Sequelize.literal('CONVERT(image USING utf8)'), 'image']],
+      where: whereFilter,
     });
 
     return filteredPizzas;
