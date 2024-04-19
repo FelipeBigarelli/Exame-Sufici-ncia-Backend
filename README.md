@@ -1,29 +1,33 @@
 # Instalação do APP
-**1:** Clone o repositório https://github.com/FelipeBigarelli/Exame-Suficiencia-Backend.git
+**01:** Clone o repositório https://github.com/FelipeBigarelli/Exame-Suficiencia-Backend.git
 
-**2:** Entre no projeto e instale as dependências de acordo com seu gerenciador de pacotes
+**02:** Entre no projeto e instale as dependências de acordo com seu gerenciador de pacotes
   - yarn install
   - npm install
 
-**3:** Configure o container do docker do banco de dados
+**03:** Configure o container do docker do banco de dados
   - docker run --name backend -p 3306:3306 -e MYSQL_ROOT_PASSWORD=1234 -d mysql
 
-**4:** Verifique se a instância 'backend' foi criada
+**04:** Verifique se a instância 'backend' foi criada
   - docker ps OU docker ps -a
   - Caso não tenha iniciado, execute o comando:
     - docker start backend
 
-**5:** Conecte ao MySQL Container
+**05:** Conecte ao MySQL Container
   - docker exec -it backend mysql -uroot -p
 
-**6:** Crie o database
+**06:** Crie o database
   - CREATE DATABASE backend;
 
-**7:** Execute a aplicação
+**07:** Execute a aplicação
   - yarn dev
 
-**8:** No Postman ou Dbeaver, conecte ao database da aplicação com as configurações contidas no arquivo src/shared/database/index.js
+**08:** No Postman ou Dbeaver, conecte ao database da aplicação com as configurações contidas no arquivo src/shared/database/index.js
 
-**9:** Crie e execute a rota de criação de tabelas do banco de dados
+## OBSERVAÇÃO :
+ - Na pasta do projeto, está adicionado o arquivo: Insomnia Suficiência Backend.json.
+ - Este arquivo contêm as configurações das rotas para teste, juntamente com a atualização automática do token quando há uma nova autenticação.
+ - Se preferir, importe este arquivo JSON montado.
+
+**09:** Crie e execute a rota de criação de tabelas do banco de dados
   - POST: http://localhost:3000/models
-
