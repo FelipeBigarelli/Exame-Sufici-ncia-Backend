@@ -13,10 +13,17 @@
   - Caso não tenha iniciado, execute o comando:
     - docker start backend
 
-**5:** Execute a aplicação
+**5:** Conecte ao MySQL Container
+  - docker exec -it backend mysql -uroot -p
+
+**6:** Crie o database
+  - CREATE DATABASE backend;
+
+**7:** Execute a aplicação
   - yarn dev
 
-**6:** No Postman ou Dbeaver, conecte ao database da aplicação com as configurações contidas no arquivo src/shared/database/index.js
+**8:** No Postman ou Dbeaver, conecte ao database da aplicação com as configurações contidas no arquivo src/shared/database/index.js
 
-**7:** Crie e execute a rota de criação de tabelas do banco de dados
-  - POST: baseURL/models
+**9:** Crie e execute a rota de criação de tabelas do banco de dados
+  - POST: http://localhost:3000/models
+
